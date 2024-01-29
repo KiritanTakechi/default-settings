@@ -86,18 +86,15 @@ uci rename nginx.@server[0]='_lan'
 # 设置服务器域名
 uci set nginx._lan.server_name='touhou.asia'
 
-# 添加监听端口（80 和 443）
-#uci add_list nginx._lan.listen='80 default_server'
-#uci add_list nginx._lan.listen='[::]:80 default_server'
+# 添加监听端口（443）
 uci add_list nginx._lan.listen='443 ssl default_server'
 uci add_list nginx._lan.listen='[::]:443 ssl default_server'
 
 # 指定 SSL 证书和密钥位置
-uci set nginx._lan.ssl_certificate='/etc/ssl/certs/touhou.asia.pem'
-uci set nginx._lan.ssl_certificate_key='/etc/ssl/private/touhou.asia.key'
+#uci set nginx._lan.ssl_certificate='/etc/ssl/certs/touhou.asia.pem'
+#uci set nginx._lan.ssl_certificate_key='/etc/ssl/private/touhou.asia.key'
 
 # 包含额外配置和位置定义
-#uci add_list nginx._lan.include='restrict_locally'
 uci add_list nginx._lan.include='conf.d/*.locations'
 
 # 设置访问日志
@@ -119,9 +116,10 @@ uci add nginx location
 uci set nginx.@location[-1].class='redirect'
 uci set nginx.@location[-1].redirect_code='301'
 uci set nginx.@location[-1].url='https://$http_host$request_uri'
+uci rename nginx.@location[-1]='_redirect'
 
 # 将重定向规则应用到 HTTP 服务器
-uci add_list nginx._http_redirect.include='@location[-1]'
+uci add_list nginx._http_redirect.include='@location[_redirect]'
 
 # 提交更改
 uci commit nginx
