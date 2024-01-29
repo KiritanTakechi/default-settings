@@ -116,10 +116,9 @@ uci add nginx location
 uci set nginx.@location[-1].class='redirect'
 uci set nginx.@location[-1].redirect_code='301'
 uci set nginx.@location[-1].url='https://$http_host$request_uri'
-uci rename nginx.@location[-1]='_redirect'
 
 # 将重定向规则应用到 HTTP 服务器
-uci add_list nginx._http_redirect.include='@location[_redirect]'
+uci add_list nginx._http_redirect.include='@location[0]'
 
 # 提交更改
 uci commit nginx
