@@ -71,7 +71,6 @@ uci commit system
 # opkg mirror
 #sed -i 's,downloads.openwrt.org,mirror.sjtu.edu.cn/openwrt,g' /etc/opkg/distfeeds.conf
 
-
 # 启用 Nginx UCI 配置
 uci set nginx.global.uci_enable='true'
 
@@ -89,6 +88,12 @@ uci set nginx._lan.server_name='touhou.asia'
 # 添加监听端口（443）
 uci add_list nginx._lan.listen='443 ssl default_server'
 uci add_list nginx._lan.listen='[::]:443 ssl default_server'
+uci add_list listen '443 quic reuseport default_server'
+uci add_list listen '[::]:443 quic reuseport default_server'
+
+uci set nginx._lan.ssl_protocols 'TLSv1.3'
+uci set nginx._lan.ssl_ciphers 'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256'
+uci set nginx._lan.ssl_protocols 'on'
 
 # 指定 SSL 证书和密钥位置
 #uci set nginx._lan.ssl_certificate='/etc/ssl/certs/touhou.asia.pem'
